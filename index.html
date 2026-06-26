@@ -1126,9 +1126,9 @@
 
     <!-- 书签生成弹窗 -->
     <div class="modal-overlay" id="bookmarklet-modal">
-      <div class="glass-card modal" style="max-width: 620px">
+      <div class="glass-card modal" style="max-width: 580px">
         <div class="card-header">
-          <h3 class="card-title">一键拉取</h3>
+          <h3 class="card-title">一键拉取书签</h3>
           <button
             class="icon-btn"
             style="
@@ -1156,149 +1156,69 @@
           </button>
         </div>
         <div class="card-content">
-          <!-- Tab Switcher -->
-          <div
+          <p
             style="
-              display: flex;
-              gap: 0;
+              font-size: 0.9rem;
+              color: var(--text-secondary);
               margin-bottom: 1.5rem;
-              border: 1px solid rgba(255, 255, 255, 0.08);
-              border-radius: 12px;
-              overflow: hidden;
+              line-height: 1.6;
             "
           >
-            <button
-              id="tab-tm"
-              class="btn-tab active"
-              onclick="switchTab('tm')"
+            <strong style="color: var(--accent-green)">Step 1:</strong>
+            先启动本地服务 →
+            <code
               style="
-                flex: 1;
-                padding: 0.7rem;
-                border: none;
-                background: rgba(10, 132, 255, 0.2);
-                color: #fff;
-                font-weight: 600;
-                font-size: 0.9rem;
-                cursor: pointer;
-                transition: all 0.2s;
-              "
-            >
-              🚀 真正一键 (推荐)
-            </button>
-            <button
-              id="tab-bm"
-              class="btn-tab"
-              onclick="switchTab('bm')"
-              style="
-                flex: 1;
-                padding: 0.7rem;
-                border: none;
-                background: transparent;
-                color: var(--text-secondary);
-                font-weight: 600;
-                font-size: 0.9rem;
-                cursor: pointer;
-                transition: all 0.2s;
-              "
-            >
-              📋 普通书签
-            </button>
-          </div>
-
-          <!-- Tampermonkey Tab -->
-          <div id="panel-tm" style="display: block">
-            <p
-              style="
-                font-size: 0.85rem;
-                color: var(--text-secondary);
-                margin-bottom: 1.25rem;
-                line-height: 1.8;
-              "
-            >
-              <div style="margin-bottom:0.6rem"><strong style="color:var(--accent-green)">①</strong> 点击下方 <strong style="color:var(--accent-blue)">安装脚本</strong> → 复制代码 → 粘贴到 Tampermonkey 新建脚本中保存</div>
-              <div style="margin-bottom:0.6rem"><strong style="color:var(--accent-green)">②</strong> 点击 <strong style="color:var(--accent-blue)">获取书签</strong> → 复制代码 → 创建浏览器书签</div>
-              <div><strong style="color:var(--accent-green)">③</strong> 任意页面点击书签 → <strong style="color:var(--accent-orange)">真正一键完成！</strong></div>
-            </div>
-            <div class="form-group" style="margin-bottom:0.75rem">
-              <label class="form-label">目标月份</label>
-              <input type="month" id="bookmarklet-month" class="form-input" style="margin-bottom:0.75rem" />
-            </div>
-            <p style="font-size:0.8rem;color:var(--accent-blue);margin-bottom:1rem">
-              📍 拉取后将跳转到：<span id="tm-target-url"></span>
-            </p>
-            <div style="display:flex;gap:0.75rem;margin-bottom:1rem">
-              <button class="btn btn-primary" style="width:auto;flex:1;font-size:0.85rem;padding:0.7rem" onclick="generateTampermonkey()">① 复制脚本</button>
-              <button class="btn btn-primary" style="width:auto;flex:1;font-size:0.85rem;padding:0.7rem" onclick="generateOneClickBookmarklet()">② 复制书签</button>
-            </div>
-            <div class="form-group" id="tm-result" style="display:none">
-              <label class="form-label" id="tm-result-label">代码</label>
-              <textarea id="tm-code" class="form-input form-textarea" style="min-height:60px;font-size:0.75rem;cursor:pointer" readonly
-                onclick="this.select();document.execCommand('copy');showCopiedToast()"></textarea>
-            </div>
-          </div>
-
-          <!-- Bookmarklet Tab -->
-          <div id="panel-bm" style="display: none">
-            <p
-              style="
-                font-size: 0.85rem;
-                color: var(--text-secondary);
-                margin-bottom: 1.25rem;
-                line-height: 1.6;
-              "
-            >
-              普通方案：需先在 HR 考勤页面，点击书签后直接拉取数据并跳转计算器。
-            </p>
-            <div class="form-group" style="margin-bottom: 0.75rem">
-              <label class="form-label">目标月份</label>
-              <input
-                type="month"
-                id="bm-month"
-                class="form-input"
-                style="margin-bottom: 0.75rem"
-              />
-            </div>
-            <p
-              id="bm-target"
-              style="
+                background: rgba(255, 255, 255, 0.1);
+                padding: 2px 6px;
+                border-radius: 4px;
                 font-size: 0.8rem;
-                color: var(--accent-blue);
-                margin-bottom: 1rem;
-                word-break: break-all;
               "
+              >npx serve -p 8080</code
+            ><br />
+            <strong style="color: var(--accent-green)">Step 2:</strong> 用
+            <strong style="color: var(--accent-blue)"
+              >http://localhost:8080/OvertimePayCalculator.html</strong
             >
-              📍 点击书签后将跳转到：<span id="bm-target-url"></span>
-            </p>
-            <div style="display: flex; gap: 0.75rem; margin-bottom: 1rem">
-              <button
-                class="btn btn-primary"
-                style="
-                  width: auto;
-                  flex: 1;
-                  font-size: 0.85rem;
-                  padding: 0.7rem;
-                "
-                onclick="generateBookmarkletBM()"
-              >
-                生成书签
-              </button>
-            </div>
-            <div class="form-group" id="bm-result" style="display: none">
-              <label class="form-label">书签代码</label>
-              <textarea
-                id="bm-code"
-                class="form-input form-textarea"
-                style="min-height: 80px; font-size: 0.75rem; cursor: pointer"
-                readonly
-                onclick="
-                  this.select();
-                  document.execCommand('copy');
-                  showCopiedToast();
-                "
-              ></textarea>
-            </div>
+            打开此页面<br />
+            <strong style="color: var(--accent-green)">Step 3:</strong>
+            复制下方书签代码 → 创建浏览器书签<br />
+            <strong style="color: var(--accent-green)">Step 4:</strong> 在 HR
+            考勤页面点击书签 → 自动拉取并跳转计算
+          </p>
+          <div class="form-group" style="margin-bottom: 0.75rem">
+            <label class="form-label">目标月份</label>
+            <input
+              type="month"
+              id="bookmarklet-month"
+              class="form-input"
+              style="margin-bottom: 0.75rem"
+            />
           </div>
-
+          <p
+            id="bookmarklet-target"
+            style="
+              font-size: 0.8rem;
+              color: var(--accent-blue);
+              margin-bottom: 1rem;
+              word-break: break-all;
+            "
+          >
+            📍 点击书签后将跳转到：<span id="bookmarklet-target-url"></span>
+          </p>
+          <div class="form-group">
+            <label class="form-label">书签代码（复制后创建书签）</label>
+            <textarea
+              id="bookmarklet-code"
+              class="form-input form-textarea"
+              style="min-height: 80px; font-size: 0.75rem; cursor: pointer"
+              readonly
+              onclick="
+                this.select();
+                document.execCommand('copy');
+                showCopiedToast();
+              "
+            ></textarea>
+          </div>
           <p
             id="copied-toast"
             style="
@@ -1308,8 +1228,27 @@
               text-align: center;
             "
           >
-            ✓ 已复制到剪贴板！
+            ✓ 已复制到剪贴板！去 HR 考勤页面点击书签即可
           </p>
+          <div
+            style="
+              display: flex;
+              justify-content: flex-end;
+              gap: 1rem;
+              margin-top: 1rem;
+            "
+          >
+            <button class="btn btn-ghost" onclick="copyBookmarklet()">
+              复制代码
+            </button>
+            <button
+              class="btn btn-primary"
+              style="width: auto; padding: 0.8rem 2rem"
+              onclick="generateBookmarklet()"
+            >
+              生成书签
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -2062,164 +2001,86 @@
         }
       }
 
-      // ===== Bookmarklet & Tampermonkey 一键拉取 =====
-
-      const QHR_URL = "https://hr.quectel.com/app/app!G8_TRwtFegd0QeO2BfN6kg";
-      const ALIST_PATH = "/ajax/function/alist!G8_TRwtFegd0QeO2BfN6kg.220302";
-
+      // ===== Bookmarklet 一键拉取 =====
       function openBookmarklet() {
         const now = new Date();
-        const monthStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
-        document.getElementById("bookmarklet-month").value = monthStr;
-        document.getElementById("bm-month").value = monthStr;
+        document.getElementById("bookmarklet-month").value =
+          `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+        generateBookmarklet();
         document.getElementById("bookmarklet-modal").classList.add("show");
-        switchTab("tm"); // 默认显示 Tampermonkey 标签
-        generateTampermonkey();
-        generateBookmarkletBM();
       }
 
       function closeBookmarklet() {
         document.getElementById("bookmarklet-modal").classList.remove("show");
       }
 
-      window.switchTab = function (tab) {
-        const tmPanel = document.getElementById("panel-tm");
-        const bmPanel = document.getElementById("panel-bm");
-        const tmBtn = document.getElementById("tab-tm");
-        const bmBtn = document.getElementById("tab-bm");
-        if (tab === "tm") {
-          tmPanel.style.display = "block";
-          bmPanel.style.display = "none";
-          tmBtn.classList.add("active");
-          bmBtn.classList.remove("active");
-          bmBtn.style.background = "transparent";
-          bmBtn.style.color = "var(--text-secondary)";
-          tmBtn.style.background = "rgba(10,132,255,0.2)";
-          tmBtn.style.color = "#fff";
-        } else {
-          tmPanel.style.display = "none";
-          bmPanel.style.display = "block";
-          bmBtn.classList.add("active");
-          tmBtn.classList.remove("active");
-          tmBtn.style.background = "transparent";
-          tmBtn.style.color = "var(--text-secondary)";
-          bmBtn.style.background = "rgba(10,132,255,0.2)";
-          bmBtn.style.color = "#fff";
+      window.generateBookmarklet = function () {
+        const monthVal = document.getElementById("bookmarklet-month").value;
+        if (!monthVal) return;
+        const [y, m] = monthVal.split("-");
+
+        // 如果在 file:// 协议下，提醒用户先用 localhost
+        if (window.location.protocol === "file:") {
+          alert(
+            "请先启动本地服务，用 http://localhost:8080 访问此页面后再生成书签。\n\n终端运行: npx serve -p 8080",
+          );
+          return;
         }
-      };
 
-      function getCalcUrl() {
-        return window.location.href.split("#")[0];
-      }
+        const calcUrl = window.location.href.split("#")[0];
 
-      function getMonth() {
-        const activeTab =
-          document.getElementById("panel-tm").style.display !== "none" ?
-            "tm"
-          : "bm";
-        const val =
-          activeTab === "tm" ?
-            document.getElementById("bookmarklet-month").value
-          : document.getElementById("bm-month").value;
-        if (!val) return null;
-        return val.split("-");
-      }
-
-      // ===== Tampermonkey 一键方案 =====
-      window.generateTampermonkey = function () {
-        const [y, m] = getMonth() || [null, null];
-        if (!y) { alert("请选择月份"); return; }
-        const calcUrl = getCalcUrl();
-        document.getElementById("tm-target-url").textContent = calcUrl;
-
-        const tmScript = `// ==UserScript==
-// @name         QHR Overtime Auto-Fetch
-// @namespace    quec-overtime-pay
-// @version      1.3
-// @description  自动拉取QHR考勤数据并跳转加班费计算器
-// @author       Rico Hu
-// @match        https://hr.quectel.com/*
-// @grant        none
-// @run-at       document-idle
-// ==/UserScript==
-
-(function() {
-  'use strict';
-  var CALC_URL = "${calcUrl}";
-  var ALIST_URL = "https://hr.quectel.com${ALIST_PATH}";
-
-  function doFetch(ym) {
-    var d = document.createElement("div");
-    d.innerHTML = '<div style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:99999;background:rgba(0,0,0,0.92);color:#fff;padding:24px 36px;border-radius:16px;font-size:16px;font-family:sans-serif;backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.15);text-align:center">⏳ 正在拉取 ' + ym + ' 打卡数据...</div>';
-    document.body.appendChild(d);
-    fetch(ALIST_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ appParam: { TERM: ym + "-01T00:00:00.000Z" }, appFnKey: "SE0302", formData: {} })
-    })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      d.remove();
-      if (!Array.isArray(data) || data.length === 0) {
-        alert("未获取到 " + ym + " 的打卡数据");
-        return;
-      }
-      var clean = data.map(function(r) { return { CARDTIME: r.CARDTIME, SHIFTTERM: r.SHIFTTERM }; });
-      var b64 = btoa(unescape(encodeURIComponent(JSON.stringify(clean))));
-      sessionStorage.removeItem("quec_overtime_pending");
-      location.href = CALC_URL + "#data=" + b64;
-    })
-    .catch(function(e) {
-      d.remove();
-      alert("拉取失败: " + e.message + "\\n请确认已登录 QHR，然后刷新页面重试");
-    });
+        const code = `javascript:(function(){
+  var m="${y}-${m}";
+  var isHR=/hr\\.quectel\\.com/.test(location.hostname);
+  if(!isHR){
+    var ok=confirm("当前不在 HR 考勤页面，是否先跳转到考勤页面？\\n\\n点击确定 → 自动打开考勤页面 → 到考勤页面后再点一次此书签即可完成拉取。");
+    if(ok) location.href="https://hr.quectel.com/app/app!G8_TRwtFegd0QeO2BfN6kg";
+    return;
   }
-
-  var pending = sessionStorage.getItem("quec_overtime_pending");
-  if (pending) {
-    // 等待页面完全加载（处理 SSO 登录后跳转的情况）
-    var retry = 0;
-    function tryFetch() {
-      retry++;
-      if (location.href.indexOf("app!G8_TRwt") > -1) {
-        doFetch(pending);
-      } else if (retry < 20) {
-        setTimeout(tryFetch, 1500);
-      } else {
-        // 超时，仍在 HR 域下尝试
-        doFetch(pending);
-      }
+  var d=document.createElement("div");
+  d.innerHTML='<div style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:99999;background:rgba(0,0,0,0.88);color:#fff;padding:24px 36px;border-radius:16px;font-size:16px;font-family:sans-serif;backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.15)">⏳ 正在拉取 '+m+' 打卡数据...</div>';
+  document.body.appendChild(d);
+  fetch("/ajax/function/alist!G8_TRwtFegd0QeO2BfN6kg.220302",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({appParam:{TERM:m+"-01T00:00:00.000Z"},appFnKey:"SE0302",formData:{}})
+  })
+  .then(function(r){return r.json()})
+  .then(function(data){
+    d.remove();
+    if(!Array.isArray(data)||data.length===0){
+      alert("未获取到 "+m+" 的打卡数据");
+      return;
     }
-    setTimeout(tryFetch, 1500);
-  }
-})();`;
+    var clean=data.map(function(r){return{CARDTIME:r.CARDTIME,SHIFTTERM:r.SHIFTTERM}});
+    var json=JSON.stringify(clean);
+    var b64=btoa(unescape(encodeURIComponent(json)));
+    location.href="${calcUrl}#data="+b64;
+  })
+  .catch(function(e){
+    d.remove();
+    alert("拉取失败: "+e.message+"\\n请确保已在 HR 考勤页面且已登录");
+  });
+})();`.replace(/\n\s*/g, "");
 
-        const tmPanel = document.getElementById("tm-result");
-        document.getElementById("tm-code").value = tmScript;
-        document.getElementById("tm-result-label").textContent = "① 全选复制 → Tampermonkey 右键新建脚本 → 粘贴 → Ctrl+S 保存";
-        tmPanel.style.display = "block";
-        document.getElementById("tm-code").style.minHeight = "240px";
+        document.getElementById("bookmarklet-code").value = code;
+        document.getElementById("bookmarklet-target-url").textContent = calcUrl;
+      };
+
+      window.copyBookmarklet = function () {
+        const ta = document.getElementById("bookmarklet-code");
+        ta.select();
+        document.execCommand("copy");
         showCopiedToast();
       };
 
-      window.generateOneClickBookmarklet = function () {
-        const [y, m] = getMonth() || [null, null];
-        if (!y) { alert("请选择月份"); return; }
-        const calcUrl = getCalcUrl();
-        document.getElementById("tm-target-url").textContent = calcUrl;
-
-        // 书签: 设 sessionStorage 标记 → 跳转 QHR
-        var code = 'javascript:(function(){'
-          + 'sessionStorage.setItem("quec_overtime_pending","' + y + '-' + m + '");'
-          + 'location.href="' + QHR_URL + '";'
-          + '})();';
-
-        document.getElementById("tm-code").value = code;
-        document.getElementById("tm-result").style.display = "block";
-        document.getElementById("tm-result-label").textContent = "书签代码（任意页面点击即可一键完成）";
-        document.getElementById("tm-code").style.minHeight = "60px";
-        showCopiedToast();
-      };
+      function showCopiedToast() {
+        const toast = document.getElementById("copied-toast");
+        toast.style.display = "block";
+        setTimeout(() => {
+          toast.style.display = "none";
+        }, 4000);
+      }
     </script>
   </body>
 </html>
