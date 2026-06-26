@@ -1185,19 +1185,28 @@
             <strong style="color: var(--accent-green)">Step 4:</strong> 在 HR
             考勤页面点击书签 → 自动拉取并跳转计算
           </p>
-          <div class="form-group">
+          <div class="form-group" style="margin-bottom: 0.75rem">
             <label class="form-label">目标月份</label>
             <input
               type="month"
               id="bookmarklet-month"
               class="form-input"
-              style="margin-bottom: 1rem"
+              style="margin-bottom: 0.75rem"
             />
           </div>
+          <p
+            id="bookmarklet-target"
+            style="
+              font-size: 0.8rem;
+              color: var(--accent-blue);
+              margin-bottom: 1rem;
+              word-break: break-all;
+            "
+          >
+            📍 点击书签后将跳转到：<span id="bookmarklet-target-url"></span>
+          </p>
           <div class="form-group">
-            <label class="form-label"
-              >书签代码（拖到收藏栏 / 复制后创建书签）</label
-            >
+            <label class="form-label">书签代码（复制后创建书签）</label>
             <textarea
               id="bookmarklet-code"
               class="form-input form-textarea"
@@ -2049,6 +2058,7 @@
 })();`.replace(/\n\s*/g, "");
 
         document.getElementById("bookmarklet-code").value = code;
+        document.getElementById("bookmarklet-target-url").textContent = calcUrl;
       };
 
       window.copyBookmarklet = function () {
