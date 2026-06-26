@@ -616,145 +616,34 @@
     <div class="bg-orb orb-3"></div>
     <div class="bg-orb orb-4"></div>
 
-    <div id="server-notice" class="server-notice" style="display: none">
-      <p>⚠️ 以 file:// 协议打开无法使用一键拉取功能</p>
-      <p
-        style="
-          font-size: 0.85rem;
-          color: var(--text-secondary);
-          margin-bottom: 0.5rem;
-        "
-      >
-        请在终端运行以下命令启动本地服务，然后用
-        <strong style="color: var(--accent-blue)"
-          >http://localhost:8080/OvertimePayCalculator.html</strong
+    <div class="container">
+      <div id="server-notice" class="server-notice" style="display: none">
+        <p>⚠️ 以 file:// 协议打开无法使用一键拉取功能</p>
+        <p
+          style="
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+          "
         >
-        访问：
-      </p>
-      <code id="server-cmd" onclick="copyServerCmd()" title="点击复制"
-        >npx serve -p 8080 "C:\Users\rico.hu\Desktop\quec_overtime_pay"</code
-      >
-      <p id="server-copied" class="copied-hint">✓ 已复制！粘贴到终端运行</p>
-    </div>
-
-    <header class="header">
-      <div class="header-controls">
-        <button class="icon-btn" id="btn-settings" title="配置">
-          <svg
-            width="22"
-            height="22"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
+          请在终端运行以下命令启动本地服务，然后用
+          <strong style="color: var(--accent-blue)"
+            >http://localhost:8080/OvertimePayCalculator.html</strong
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-            ></path>
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-            ></path>
-          </svg>
-        </button>
-        <button class="icon-btn" id="btn-bookmarklet" title="一键拉取">
-          <svg
-            width="22"
-            height="22"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-            ></path>
-          </svg>
-        </button>
+          访问：
+        </p>
+        <code id="server-cmd" onclick="copyServerCmd()" title="点击复制"
+          >npx serve -p 8080 "C:\Users\rico.hu\Desktop\quec_overtime_pay"</code
+        >
+        <p id="server-copied" class="copied-hint">✓ 已复制！粘贴到终端运行</p>
       </div>
 
-      <h1>Overtime Pro</h1>
-      <p>专业 · 安全 · 极简</p>
-    </header>
-
-    <div class="main-grid">
-      <!-- 左侧输入区 -->
-      <div class="glass-card">
-        <div class="card-header">
-          <h2 class="card-title">
+      <header class="header">
+        <div class="header-controls">
+          <button class="icon-btn" id="btn-settings" title="配置">
             <svg
               width="22"
               height="22"
-              fill="none"
-              stroke="var(--accent-green)"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-              ></path>
-            </svg>
-            数据录入
-          </h2>
-          <button class="btn btn-ghost" onclick="clearData()">清空</button>
-        </div>
-        <div class="card-content">
-          <div class="form-group">
-            <label class="form-label">考勤数据 (JSON)</label>
-            <textarea
-              id="attendance-data"
-              class="form-input form-textarea"
-              placeholder="在此粘贴 JSON 数据或拖拽文件..."
-            ></textarea>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">本月事假 (小时)</label>
-            <input
-              type="number"
-              id="leave-hours"
-              class="form-input"
-              min="0"
-              step="0.5"
-              value="0"
-            />
-          </div>
-
-          <button
-            class="btn btn-primary"
-            id="btn-calculate"
-            onclick="calculateOvertime()"
-          >
-            开始计算
-          </button>
-
-          <div
-            id="error-message"
-            style="
-              display: none;
-              margin-top: 1rem;
-              padding: 1rem;
-              border-radius: 12px;
-              background: rgba(255, 69, 58, 0.15);
-              color: var(--accent-red);
-              font-size: 0.9rem;
-              align-items: center;
-              gap: 0.5rem;
-              border: 1px solid rgba(255, 69, 58, 0.2);
-              backdrop-filter: blur(10px);
-            "
-          >
-            <svg
-              width="20"
-              height="20"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -763,52 +652,110 @@
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
-                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+              ></path>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
               ></path>
             </svg>
-            <span id="error-text"></span>
-          </div>
+          </button>
+          <button class="icon-btn" id="btn-bookmarklet" title="一键拉取">
+            <svg
+              width="22"
+              height="22"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+              ></path>
+            </svg>
+          </button>
         </div>
-      </div>
 
-      <!-- 右侧结果区 -->
-      <div class="glass-card">
-        <div class="card-header">
-          <h2 class="card-title">概览</h2>
-        </div>
-        <div class="card-content">
-          <div id="results-container" class="results-grid">
+        <h1>Overtime Pro</h1>
+        <p>专业 · 安全 · 极简</p>
+      </header>
+
+      <div class="main-grid">
+        <!-- 左侧输入区 -->
+        <div class="glass-card">
+          <div class="card-header">
+            <h2 class="card-title">
+              <svg
+                width="22"
+                height="22"
+                fill="none"
+                stroke="var(--accent-green)"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                ></path>
+              </svg>
+              数据录入
+            </h2>
+            <button class="btn btn-ghost" onclick="clearData()">清空</button>
+          </div>
+          <div class="card-content">
+            <div class="form-group">
+              <label class="form-label">考勤数据 (JSON)</label>
+              <textarea
+                id="attendance-data"
+                class="form-input form-textarea"
+                placeholder="在此粘贴 JSON 数据或拖拽文件..."
+              ></textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">本月事假 (小时)</label>
+              <input
+                type="number"
+                id="leave-hours"
+                class="form-input"
+                min="0"
+                step="0.5"
+                value="0"
+              />
+            </div>
+
+            <button
+              class="btn btn-primary"
+              id="btn-calculate"
+              onclick="calculateOvertime()"
+            >
+              开始计算
+            </button>
+
             <div
-              class="result-item"
+              id="error-message"
               style="
+                display: none;
+                margin-top: 1rem;
+                padding: 1rem;
+                border-radius: 12px;
+                background: rgba(255, 69, 58, 0.15);
+                color: var(--accent-red);
+                font-size: 0.9rem;
                 align-items: center;
-                justify-content: center;
-                min-height: 180px;
-                color: var(--text-tertiary);
+                gap: 0.5rem;
+                border: 1px solid rgba(255, 69, 58, 0.2);
+                backdrop-filter: blur(10px);
               "
             >
-              等待数据...
-            </div>
-          </div>
-
-          <div
-            id="export-section"
-            style="
-              display: none;
-              margin-top: 2rem;
-              padding-top: 1.5rem;
-              border-top: 1px solid rgba(255, 255, 255, 0.05);
-            "
-          >
-            <button
-              class="btn btn-ghost"
-              style="width: 100%; color: var(--text-secondary)"
-              onclick="exportToExcel()"
-            >
               <svg
-                style="margin-right: 0.5rem"
-                width="18"
-                height="18"
+                width="20"
+                height="20"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -817,202 +764,257 @@
                   stroke-linecap="round"
                   stroke-linejoin="round"
                   stroke-width="2"
-                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                  d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                 ></path>
               </svg>
-              导出报表
-            </button>
+              <span id="error-text"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右侧结果区 -->
+        <div class="glass-card">
+          <div class="card-header">
+            <h2 class="card-title">概览</h2>
+          </div>
+          <div class="card-content">
+            <div id="results-container" class="results-grid">
+              <div
+                class="result-item"
+                style="
+                  align-items: center;
+                  justify-content: center;
+                  min-height: 180px;
+                  color: var(--text-tertiary);
+                "
+              >
+                等待数据...
+              </div>
+            </div>
+
+            <div
+              id="export-section"
+              style="
+                display: none;
+                margin-top: 2rem;
+                padding-top: 1.5rem;
+                border-top: 1px solid rgba(255, 255, 255, 0.05);
+              "
+            >
+              <button
+                class="btn btn-ghost"
+                style="width: 100%; color: var(--text-secondary)"
+                onclick="exportToExcel()"
+              >
+                <svg
+                  style="margin-right: 0.5rem"
+                  width="18"
+                  height="18"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                  ></path>
+                </svg>
+                导出报表
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- 日历视图 -->
-    <div
-      id="calendar-container"
-      class="glass-card calendar-container"
-      style="display: none"
-    >
-      <div class="calendar-header">
-        <div>
-          <h3
-            class="card-title"
-            id="calendar-title"
-            style="margin-bottom: 0.25rem"
+      <!-- 日历视图 -->
+      <div
+        id="calendar-container"
+        class="glass-card calendar-container"
+        style="display: none"
+      >
+        <div class="calendar-header">
+          <div>
+            <h3
+              class="card-title"
+              id="calendar-title"
+              style="margin-bottom: 0.25rem"
+            >
+              工时日历
+            </h3>
+            <p style="font-size: 0.8rem; color: var(--text-secondary)">
+              点击日期切换类型
+            </p>
+          </div>
+          <div
+            style="
+              display: flex;
+              gap: 1rem;
+              font-size: 0.8rem;
+              color: var(--text-secondary);
+            "
           >
-            工时日历
-          </h3>
-          <p style="font-size: 0.8rem; color: var(--text-secondary)">
-            点击日期切换类型
-          </p>
-        </div>
-        <div
-          style="
-            display: flex;
-            gap: 1rem;
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-          "
-        >
-          <div style="display: flex; align-items: center; gap: 0.4rem">
-            <span
-              style="
-                width: 8px;
-                height: 8px;
-                border-radius: 50%;
-                background: var(--accent-green);
-                box-shadow: 0 0 8px var(--accent-green);
-              "
-            ></span
-            >工作日
-          </div>
-          <div style="display: flex; align-items: center; gap: 0.4rem">
-            <span
-              style="
-                width: 8px;
-                height: 8px;
-                border-radius: 50%;
-                background: var(--accent-blue);
-                box-shadow: 0 0 8px var(--accent-blue);
-              "
-            ></span
-            >周末
-          </div>
-          <div style="display: flex; align-items: center; gap: 0.4rem">
-            <span
-              style="
-                width: 8px;
-                height: 8px;
-                border-radius: 50%;
-                background: var(--accent-orange);
-                box-shadow: 0 0 8px var(--accent-orange);
-              "
-            ></span
-            >节假日
-          </div>
-        </div>
-      </div>
-      <div id="calendar-grid" class="calendar-grid"></div>
-    </div>
-
-    <!-- 图表视图 -->
-    <div
-      id="charts-container"
-      class="glass-card"
-      style="display: none; margin-bottom: 2rem"
-    >
-      <div class="card-header">
-        <h3 class="card-title">可视化</h3>
-      </div>
-      <div class="charts-grid">
-        <div class="chart-card">
-          <div id="fee-pie-chart" class="chart-canvas"></div>
-        </div>
-        <div class="chart-card">
-          <div id="time-bar-chart" class="chart-canvas"></div>
-        </div>
-        <div class="chart-card">
-          <div id="daily-line-chart" class="chart-canvas"></div>
-        </div>
-        <div class="chart-card">
-          <div id="days-doughnut-chart" class="chart-canvas"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 使用说明 -->
-    <div class="glass-card">
-      <div class="card-header"><h3 class="card-title">使用指南</h3></div>
-      <div class="card-content">
-        <div
-          style="
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-          "
-        >
-          <div>
-            <div
-              style="
-                font-weight: 600;
-                margin-bottom: 0.5rem;
-                color: var(--accent-green);
-                font-size: 1.1rem;
-              "
-            >
-              🚀 一键拉取
-            </div>
-            <p
-              style="
-                font-size: 0.9rem;
-                color: var(--text-secondary);
-                line-height: 1.6;
-              "
-            >
-              终端运行
-              <code
+            <div style="display: flex; align-items: center; gap: 0.4rem">
+              <span
                 style="
-                  background: rgba(255, 255, 255, 0.1);
-                  padding: 2px 6px;
-                  border-radius: 4px;
+                  width: 8px;
+                  height: 8px;
+                  border-radius: 50%;
+                  background: var(--accent-green);
+                  box-shadow: 0 0 8px var(--accent-green);
                 "
-                >npx serve -p 8080</code
-              >
-              → 用 localhost 打开本页面 → 点右上角 ⬇ 生成书签 → 在 HR
-              考勤页面点书签即可。
-            </p>
-          </div>
-          <div>
-            <div
-              style="
-                font-weight: 600;
-                margin-bottom: 0.5rem;
-                color: var(--accent-blue);
-                font-size: 1.1rem;
-              "
-            >
-              📋 手动粘贴
+              ></span
+              >工作日
             </div>
-            <p
-              style="
-                font-size: 0.9rem;
-                color: var(--text-secondary);
-                line-height: 1.6;
-              "
-            >
-              从 QHR 系统 Network 面板复制
-              <code
+            <div style="display: flex; align-items: center; gap: 0.4rem">
+              <span
                 style="
-                  background: rgba(255, 255, 255, 0.1);
-                  padding: 2px 6px;
-                  border-radius: 4px;
+                  width: 8px;
+                  height: 8px;
+                  border-radius: 50%;
+                  background: var(--accent-blue);
+                  box-shadow: 0 0 8px var(--accent-blue);
                 "
-                >alist</code
-              >
-              响应，粘贴到左侧输入框计算。
-            </p>
-          </div>
-          <div>
-            <div
-              style="
-                font-weight: 600;
-                margin-bottom: 0.5rem;
-                color: var(--accent-orange);
-                font-size: 1.1rem;
-              "
-            >
-              📊 导出报表
+              ></span
+              >周末
             </div>
-            <p
-              style="
-                font-size: 0.9rem;
-                color: var(--text-secondary);
-                line-height: 1.6;
-              "
-            >
-              在日历视图中点击日期可切换类型（工作日/周末/节假日），确认无误后一键导出
-              Excel。
-            </p>
+            <div style="display: flex; align-items: center; gap: 0.4rem">
+              <span
+                style="
+                  width: 8px;
+                  height: 8px;
+                  border-radius: 50%;
+                  background: var(--accent-orange);
+                  box-shadow: 0 0 8px var(--accent-orange);
+                "
+              ></span
+              >节假日
+            </div>
+          </div>
+        </div>
+        <div id="calendar-grid" class="calendar-grid"></div>
+      </div>
+
+      <!-- 图表视图 -->
+      <div
+        id="charts-container"
+        class="glass-card"
+        style="display: none; margin-bottom: 2rem"
+      >
+        <div class="card-header">
+          <h3 class="card-title">可视化</h3>
+        </div>
+        <div class="charts-grid">
+          <div class="chart-card">
+            <div id="fee-pie-chart" class="chart-canvas"></div>
+          </div>
+          <div class="chart-card">
+            <div id="time-bar-chart" class="chart-canvas"></div>
+          </div>
+          <div class="chart-card">
+            <div id="daily-line-chart" class="chart-canvas"></div>
+          </div>
+          <div class="chart-card">
+            <div id="days-doughnut-chart" class="chart-canvas"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 使用说明 -->
+      <div class="glass-card">
+        <div class="card-header"><h3 class="card-title">使用指南</h3></div>
+        <div class="card-content">
+          <div
+            style="
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+              gap: 2rem;
+            "
+          >
+            <div>
+              <div
+                style="
+                  font-weight: 600;
+                  margin-bottom: 0.5rem;
+                  color: var(--accent-green);
+                  font-size: 1.1rem;
+                "
+              >
+                🚀 一键拉取
+              </div>
+              <p
+                style="
+                  font-size: 0.9rem;
+                  color: var(--text-secondary);
+                  line-height: 1.6;
+                "
+              >
+                终端运行
+                <code
+                  style="
+                    background: rgba(255, 255, 255, 0.1);
+                    padding: 2px 6px;
+                    border-radius: 4px;
+                  "
+                  >npx serve -p 8080</code
+                >
+                → 用 localhost 打开本页面 → 点右上角 ⬇ 生成书签 → 在 HR
+                考勤页面点书签即可。
+              </p>
+            </div>
+            <div>
+              <div
+                style="
+                  font-weight: 600;
+                  margin-bottom: 0.5rem;
+                  color: var(--accent-blue);
+                  font-size: 1.1rem;
+                "
+              >
+                📋 手动粘贴
+              </div>
+              <p
+                style="
+                  font-size: 0.9rem;
+                  color: var(--text-secondary);
+                  line-height: 1.6;
+                "
+              >
+                从 QHR 系统 Network 面板复制
+                <code
+                  style="
+                    background: rgba(255, 255, 255, 0.1);
+                    padding: 2px 6px;
+                    border-radius: 4px;
+                  "
+                  >alist</code
+                >
+                响应，粘贴到左侧输入框计算。
+              </p>
+            </div>
+            <div>
+              <div
+                style="
+                  font-weight: 600;
+                  margin-bottom: 0.5rem;
+                  color: var(--accent-orange);
+                  font-size: 1.1rem;
+                "
+              >
+                📊 导出报表
+              </div>
+              <p
+                style="
+                  font-size: 0.9rem;
+                  color: var(--text-secondary);
+                  line-height: 1.6;
+                "
+              >
+                在日历视图中点击日期可切换类型（工作日/周末/节假日），确认无误后一键导出
+                Excel。
+              </p>
+            </div>
           </div>
         </div>
       </div>
