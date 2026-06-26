@@ -2031,6 +2031,12 @@
 
         const code = `javascript:(function(){
   var m="${y}-${m}";
+  var isHR=/hr\\.quectel\\.com/.test(location.hostname);
+  if(!isHR){
+    var ok=confirm("当前不在 HR 考勤页面，是否先跳转到考勤页面？\\n\\n点击确定 → 自动打开考勤页面 → 到考勤页面后再点一次此书签即可完成拉取。");
+    if(ok) location.href="https://hr.quectel.com/app/app!G8_TRwtFegd0QeO2BfN6kg";
+    return;
+  }
   var d=document.createElement("div");
   d.innerHTML='<div style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:99999;background:rgba(0,0,0,0.88);color:#fff;padding:24px 36px;border-radius:16px;font-size:16px;font-family:sans-serif;backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.15)">⏳ 正在拉取 '+m+' 打卡数据...</div>';
   document.body.appendChild(d);
@@ -2049,7 +2055,7 @@
     var clean=data.map(function(r){return{CARDTIME:r.CARDTIME,SHIFTTERM:r.SHIFTTERM}});
     var json=JSON.stringify(clean);
     var b64=btoa(unescape(encodeURIComponent(json)));
-    window.location.href="${calcUrl}#data="+b64;
+    location.href="${calcUrl}#data="+b64;
   })
   .catch(function(e){
     d.remove();
