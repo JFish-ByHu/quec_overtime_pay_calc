@@ -1,0 +1,2068 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Overtime Pro - Black Glass</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        /* iPhone Black Glass Palette - Ultimate Transparency */
+        --bg-color: #000000;
+
+        /* Much higher transparency for "inner look" */
+        --card-bg: rgba(40, 40, 45, 0.3);
+        /* Subtle gradient border */
+        --card-border-color: rgba(255, 255, 255, 0.12);
+
+        --card-radius: 28px;
+
+        /* Enhanced inner light reflection */
+        --glass-inner-highlight:
+          inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+          inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
+
+        /* Text Colors */
+        --text-primary: rgba(255, 255, 255, 0.95);
+        --text-secondary: rgba(255, 255, 255, 0.65);
+        --text-tertiary: rgba(255, 255, 255, 0.4);
+
+        /* Accents - Neon/iOS Style */
+        --accent-green: #32d74b;
+        --accent-blue: #0a84ff;
+        --accent-orange: #ff9f0a;
+        --accent-red: #ff453a;
+        --accent-purple: #bf5af2;
+
+        /* Input & Controls */
+        --input-bg: rgba(0, 0, 0, 0.2);
+
+        /* High blur + Saturation for that "Premium" feel */
+        --glass-blur: blur(50px) saturate(190%);
+        --glass-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", sans-serif;
+        background-color: var(--bg-color);
+        min-height: 100vh;
+        color: var(--text-primary);
+        line-height: 1.5;
+        padding-bottom: 4rem;
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+      }
+
+      /* Vivid Background Orbs */
+      .bg-orb {
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(90px);
+        z-index: -1;
+        opacity: 0.6; /* Increased opacity to show through glass */
+        animation: floatOrb 25s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+        pointer-events: none;
+      }
+
+      .orb-1 {
+        width: 700px;
+        height: 700px;
+        background: radial-gradient(
+          circle,
+          rgba(10, 132, 255, 0.6) 0%,
+          transparent 70%
+        );
+        top: -250px;
+        left: -150px;
+      }
+
+      .orb-2 {
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(
+          circle,
+          rgba(94, 92, 230, 0.6) 0%,
+          transparent 70%
+        );
+        bottom: -150px;
+        right: -50px;
+        animation-delay: -7s;
+      }
+
+      .orb-3 {
+        width: 450px;
+        height: 450px;
+        background: radial-gradient(
+          circle,
+          rgba(48, 209, 88, 0.5) 0%,
+          transparent 70%
+        );
+        top: 30%;
+        left: 20%;
+        opacity: 0.3;
+        animation-duration: 35s;
+        animation-delay: -2s;
+      }
+
+      .orb-4 {
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(
+          circle,
+          rgba(255, 159, 10, 0.5) 0%,
+          transparent 70%
+        );
+        top: 60%;
+        right: 25%;
+        opacity: 0.3;
+        animation-duration: 28s;
+        animation-delay: -5s;
+      }
+
+      @keyframes floatOrb {
+        0% {
+          transform: translate(0, 0) scale(1) rotate(0deg);
+        }
+        50% {
+          transform: translate(40px, 30px) scale(1.1) rotate(5deg);
+        }
+        100% {
+          transform: translate(-20px, 60px) scale(0.95) rotate(-5deg);
+        }
+      }
+
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 2rem 1.5rem;
+      }
+
+      /* Header */
+      .header {
+        text-align: center;
+        margin-bottom: 3.5rem;
+        padding-top: 2rem;
+        position: relative;
+      }
+
+      .header h1 {
+        font-size: 4rem;
+        font-weight: 700;
+        letter-spacing: -0.04em;
+        background: linear-gradient(
+          180deg,
+          #fff 10%,
+          rgba(255, 255, 255, 0.6) 100%
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.5rem;
+        text-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      }
+
+      .header p {
+        font-size: 1.1rem;
+        color: var(--text-secondary);
+        font-weight: 400;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        opacity: 0.8;
+      }
+
+      /* Ultimate Glass Card */
+      .glass-card {
+        background: var(--card-bg);
+        backdrop-filter: var(--glass-blur);
+        -webkit-backdrop-filter: var(--glass-blur);
+        border-radius: var(--card-radius);
+        box-shadow: var(--glass-shadow), var(--glass-inner-highlight);
+        /* Subtle border ring */
+        border: 1px solid var(--card-border-color);
+        overflow: hidden;
+        transition:
+          transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+          box-shadow 0.4s ease;
+        position: relative;
+      }
+
+      /* Noise texture for premium matte finish */
+      .glass-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.04'/%3E%3C/svg%3E");
+        pointer-events: none;
+        z-index: 0;
+        mix-blend-mode: overlay;
+        opacity: 0.6;
+      }
+
+      /* Gradient overlay for sheen */
+      .glass-card::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          125deg,
+          rgba(255, 255, 255, 0.05) 0%,
+          transparent 40%,
+          transparent 60%,
+          rgba(255, 255, 255, 0.02) 100%
+        );
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .glass-card > * {
+        position: relative;
+        z-index: 1;
+      }
+
+      .glass-card:hover {
+        transform: translateY(-6px) scale(1.005);
+        box-shadow:
+          0 30px 60px -10px rgba(0, 0, 0, 0.8),
+          var(--glass-inner-highlight);
+        border-color: rgba(255, 255, 255, 0.2);
+      }
+
+      .main-grid {
+        display: grid;
+        grid-template-columns: 1fr 380px;
+        gap: 2rem;
+        margin-bottom: 2.5rem;
+      }
+
+      .card-header {
+        padding: 1.5rem 1.75rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: rgba(255, 255, 255, 0.015);
+      }
+
+      .card-title {
+        font-size: 1.15rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        letter-spacing: -0.01em;
+      }
+
+      .card-content {
+        padding: 1.75rem;
+      }
+
+      /* Form Elements */
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+
+      .form-label {
+        display: block;
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: var(--text-secondary);
+        margin-bottom: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .form-input {
+        width: 100%;
+        padding: 1.1rem;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: var(--input-bg);
+        border-radius: 16px;
+        font-size: 1.05rem;
+        color: var(--text-primary);
+        font-family: inherit;
+        transition: all 0.3s ease;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(10px);
+      }
+
+      .form-input:focus {
+        outline: none;
+        background: rgba(0, 0, 0, 0.4);
+        border-color: var(--accent-blue);
+        box-shadow: 0 0 0 4px rgba(10, 132, 255, 0.15);
+      }
+
+      .form-textarea {
+        min-height: 160px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.95rem;
+        line-height: 1.6;
+        resize: vertical;
+      }
+
+      .form-textarea.drag-over {
+        border-color: var(--accent-blue);
+        background: rgba(10, 132, 255, 0.1);
+        transform: scale(0.99);
+      }
+
+      /* Buttons */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+        padding: 1rem 1.8rem;
+        border: none;
+        border-radius: 16px;
+        font-size: 1.05rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+        width: 100%;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .btn-primary {
+        background: var(--accent-blue);
+        color: white;
+        box-shadow: 0 8px 20px rgba(10, 132, 255, 0.3);
+      }
+
+      .btn-primary::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.1) 0%,
+          transparent 100%
+        );
+        opacity: 0.5;
+      }
+
+      .btn-primary:hover {
+        background: #0077ed;
+        transform: translateY(-2px);
+        box-shadow: 0 12px 24px rgba(10, 132, 255, 0.4);
+      }
+
+      .btn-primary:active {
+        transform: translateY(1px);
+        box-shadow: 0 4px 8px rgba(10, 132, 255, 0.3);
+      }
+
+      .btn-ghost {
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--text-primary);
+        width: auto;
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+      }
+      .btn-ghost:hover {
+        background: rgba(255, 255, 255, 0.15);
+      }
+
+      .icon-btn {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        backdrop-filter: blur(10px);
+      }
+      .icon-btn:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: rotate(15deg) scale(1.1);
+      }
+
+      .header-controls {
+        position: absolute;
+        top: 2rem;
+        right: 0;
+        display: flex;
+        gap: 1rem;
+      }
+
+      /* Results */
+      .results-grid {
+        display: grid;
+        gap: 1.25rem;
+      }
+
+      .result-item {
+        background: rgba(255, 255, 255, 0.04);
+        padding: 1.5rem;
+        border-radius: 20px;
+        display: flex;
+        flex-direction: column;
+        transition: all 0.3s;
+        border: 1px solid rgba(255, 255, 255, 0.02);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .result-item:hover {
+        background: rgba(255, 255, 255, 0.08);
+        transform: scale(1.02);
+      }
+
+      .result-item.highlight {
+        background: rgba(10, 132, 255, 0.15);
+        border: 1px solid rgba(10, 132, 255, 0.2);
+        box-shadow: 0 0 30px rgba(10, 132, 255, 0.1);
+      }
+
+      .result-value {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: white;
+        line-height: 1.1;
+        margin-bottom: 0.4rem;
+        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      }
+
+      .highlight .result-value {
+        color: white;
+        text-shadow: 0 0 20px rgba(10, 132, 255, 0.6);
+      }
+
+      .result-label {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        font-weight: 500;
+      }
+
+      /* Calendar */
+      .calendar-container {
+        margin-bottom: 2.5rem;
+      }
+
+      .calendar-header {
+        padding: 1.5rem 1.75rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        background: rgba(255, 255, 255, 0.05);
+        gap: 1px;
+      }
+
+      .calendar-day-header {
+        padding: 1rem;
+        text-align: center;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+        background: rgba(20, 20, 25, 0.6);
+        backdrop-filter: blur(20px);
+      }
+
+      .calendar-day {
+        min-height: 110px;
+        background: rgba(40, 40, 45, 0.3); /* Transparent grid items */
+        padding: 0.75rem;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        transition: all 0.2s;
+        position: relative;
+      }
+
+      .calendar-day:hover {
+        background: rgba(255, 255, 255, 0.1);
+        z-index: 10;
+      }
+
+      .day-number {
+        font-weight: 600;
+        margin-bottom: 0.4rem;
+        font-size: 1.1rem;
+        color: var(--text-primary);
+      }
+
+      .day-tag {
+        font-size: 0.75rem;
+        padding: 0.3rem 0.6rem;
+        border-radius: 8px;
+        text-align: center;
+        font-weight: 600;
+        margin-top: auto;
+        backdrop-filter: blur(4px);
+      }
+      .day-tag.workday {
+        background: rgba(48, 209, 88, 0.2);
+        color: var(--accent-green);
+        border: 1px solid rgba(48, 209, 88, 0.3);
+      }
+      .day-tag.weekend {
+        background: rgba(10, 132, 255, 0.2);
+        color: var(--accent-blue);
+        border: 1px solid rgba(10, 132, 255, 0.3);
+      }
+      .day-tag.holiday {
+        background: rgba(255, 159, 10, 0.2);
+        color: var(--accent-orange);
+        border: 1px solid rgba(255, 159, 10, 0.3);
+      }
+
+      /* Charts */
+      .charts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+        padding: 2rem;
+      }
+      .chart-card {
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 20px;
+        padding: 1.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2);
+      }
+      .chart-canvas {
+        width: 100%;
+        height: 320px;
+      }
+
+      /* Modal */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.4s;
+      }
+      .modal-overlay.show {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .modal {
+        width: 90%;
+        max-width: 480px;
+        transform: scale(0.9) translateY(20px);
+        transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.8);
+        background: rgba(30, 30, 35, 0.65); /* More transparent modal */
+      }
+      .modal-overlay.show .modal {
+        transform: scale(1) translateY(0);
+      }
+
+      /* Responsive */
+      @media (max-width: 900px) {
+        .main-grid {
+          grid-template-columns: 1fr;
+        }
+        .header h1 {
+          font-size: 3rem;
+        }
+        .orb-1 {
+          width: 400px;
+          height: 400px;
+          left: -100px;
+        }
+        .orb-2 {
+          width: 300px;
+          height: 300px;
+          right: -50px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Vivid Background Orbs for Transparency Effect -->
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
+    <div class="bg-orb orb-4"></div>
+
+    <div id="server-notice" class="server-notice" style="display: none">
+      <p>⚠️ 以 file:// 协议打开无法使用一键拉取功能</p>
+      <p
+        style="
+          font-size: 0.85rem;
+          color: var(--text-secondary);
+          margin-bottom: 0.5rem;
+        "
+      >
+        请在终端运行以下命令启动本地服务，然后用
+        <strong style="color: var(--accent-blue)"
+          >http://localhost:8080/OvertimePayCalculator.html</strong
+        >
+        访问：
+      </p>
+      <code id="server-cmd" onclick="copyServerCmd()" title="点击复制"
+        >npx serve -p 8080 "C:\Users\rico.hu\Desktop\quec_overtime_pay"</code
+      >
+      <p id="server-copied" class="copied-hint">✓ 已复制！粘贴到终端运行</p>
+    </div>
+
+    <header class="header">
+      <div class="header-controls">
+        <button class="icon-btn" id="btn-settings" title="配置">
+          <svg
+            width="22"
+            height="22"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+            ></path>
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+            ></path>
+          </svg>
+        </button>
+        <button class="icon-btn" id="btn-bookmarklet" title="一键拉取">
+          <svg
+            width="22"
+            height="22"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+            ></path>
+          </svg>
+        </button>
+      </div>
+
+      <h1>Overtime Pro</h1>
+      <p>专业 · 安全 · 极简</p>
+    </header>
+
+    <div class="main-grid">
+      <!-- 左侧输入区 -->
+      <div class="glass-card">
+        <div class="card-header">
+          <h2 class="card-title">
+            <svg
+              width="22"
+              height="22"
+              fill="none"
+              stroke="var(--accent-green)"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              ></path>
+            </svg>
+            数据录入
+          </h2>
+          <button class="btn btn-ghost" onclick="clearData()">清空</button>
+        </div>
+        <div class="card-content">
+          <div class="form-group">
+            <label class="form-label">考勤数据 (JSON)</label>
+            <textarea
+              id="attendance-data"
+              class="form-input form-textarea"
+              placeholder="在此粘贴 JSON 数据或拖拽文件..."
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">本月事假 (小时)</label>
+            <input
+              type="number"
+              id="leave-hours"
+              class="form-input"
+              min="0"
+              step="0.5"
+              value="0"
+            />
+          </div>
+
+          <button
+            class="btn btn-primary"
+            id="btn-calculate"
+            onclick="calculateOvertime()"
+          >
+            开始计算
+          </button>
+
+          <div
+            id="error-message"
+            style="
+              display: none;
+              margin-top: 1rem;
+              padding: 1rem;
+              border-radius: 12px;
+              background: rgba(255, 69, 58, 0.15);
+              color: var(--accent-red);
+              font-size: 0.9rem;
+              align-items: center;
+              gap: 0.5rem;
+              border: 1px solid rgba(255, 69, 58, 0.2);
+              backdrop-filter: blur(10px);
+            "
+          >
+            <svg
+              width="20"
+              height="20"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              ></path>
+            </svg>
+            <span id="error-text"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 右侧结果区 -->
+      <div class="glass-card">
+        <div class="card-header">
+          <h2 class="card-title">概览</h2>
+        </div>
+        <div class="card-content">
+          <div id="results-container" class="results-grid">
+            <div
+              class="result-item"
+              style="
+                align-items: center;
+                justify-content: center;
+                min-height: 180px;
+                color: var(--text-tertiary);
+              "
+            >
+              等待数据...
+            </div>
+          </div>
+
+          <div
+            id="export-section"
+            style="
+              display: none;
+              margin-top: 2rem;
+              padding-top: 1.5rem;
+              border-top: 1px solid rgba(255, 255, 255, 0.05);
+            "
+          >
+            <button
+              class="btn btn-ghost"
+              style="width: 100%; color: var(--text-secondary)"
+              onclick="exportToExcel()"
+            >
+              <svg
+                style="margin-right: 0.5rem"
+                width="18"
+                height="18"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                ></path>
+              </svg>
+              导出报表
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 日历视图 -->
+    <div
+      id="calendar-container"
+      class="glass-card calendar-container"
+      style="display: none"
+    >
+      <div class="calendar-header">
+        <div>
+          <h3
+            class="card-title"
+            id="calendar-title"
+            style="margin-bottom: 0.25rem"
+          >
+            工时日历
+          </h3>
+          <p style="font-size: 0.8rem; color: var(--text-secondary)">
+            点击日期切换类型
+          </p>
+        </div>
+        <div
+          style="
+            display: flex;
+            gap: 1rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+          "
+        >
+          <div style="display: flex; align-items: center; gap: 0.4rem">
+            <span
+              style="
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background: var(--accent-green);
+                box-shadow: 0 0 8px var(--accent-green);
+              "
+            ></span
+            >工作日
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.4rem">
+            <span
+              style="
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background: var(--accent-blue);
+                box-shadow: 0 0 8px var(--accent-blue);
+              "
+            ></span
+            >周末
+          </div>
+          <div style="display: flex; align-items: center; gap: 0.4rem">
+            <span
+              style="
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background: var(--accent-orange);
+                box-shadow: 0 0 8px var(--accent-orange);
+              "
+            ></span
+            >节假日
+          </div>
+        </div>
+      </div>
+      <div id="calendar-grid" class="calendar-grid"></div>
+    </div>
+
+    <!-- 图表视图 -->
+    <div
+      id="charts-container"
+      class="glass-card"
+      style="display: none; margin-bottom: 2rem"
+    >
+      <div class="card-header">
+        <h3 class="card-title">可视化</h3>
+      </div>
+      <div class="charts-grid">
+        <div class="chart-card">
+          <div id="fee-pie-chart" class="chart-canvas"></div>
+        </div>
+        <div class="chart-card">
+          <div id="time-bar-chart" class="chart-canvas"></div>
+        </div>
+        <div class="chart-card">
+          <div id="daily-line-chart" class="chart-canvas"></div>
+        </div>
+        <div class="chart-card">
+          <div id="days-doughnut-chart" class="chart-canvas"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 使用说明 -->
+    <div class="glass-card">
+      <div class="card-header"><h3 class="card-title">使用指南</h3></div>
+      <div class="card-content">
+        <div
+          style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+          "
+        >
+          <div>
+            <div
+              style="
+                font-weight: 600;
+                margin-bottom: 0.5rem;
+                color: var(--accent-green);
+                font-size: 1.1rem;
+              "
+            >
+              🚀 一键拉取
+            </div>
+            <p
+              style="
+                font-size: 0.9rem;
+                color: var(--text-secondary);
+                line-height: 1.6;
+              "
+            >
+              终端运行
+              <code
+                style="
+                  background: rgba(255, 255, 255, 0.1);
+                  padding: 2px 6px;
+                  border-radius: 4px;
+                "
+                >npx serve -p 8080</code
+              >
+              → 用 localhost 打开本页面 → 点右上角 ⬇ 生成书签 → 在 HR
+              考勤页面点书签即可。
+            </p>
+          </div>
+          <div>
+            <div
+              style="
+                font-weight: 600;
+                margin-bottom: 0.5rem;
+                color: var(--accent-blue);
+                font-size: 1.1rem;
+              "
+            >
+              📋 手动粘贴
+            </div>
+            <p
+              style="
+                font-size: 0.9rem;
+                color: var(--text-secondary);
+                line-height: 1.6;
+              "
+            >
+              从 QHR 系统 Network 面板复制
+              <code
+                style="
+                  background: rgba(255, 255, 255, 0.1);
+                  padding: 2px 6px;
+                  border-radius: 4px;
+                "
+                >alist</code
+              >
+              响应，粘贴到左侧输入框计算。
+            </p>
+          </div>
+          <div>
+            <div
+              style="
+                font-weight: 600;
+                margin-bottom: 0.5rem;
+                color: var(--accent-orange);
+                font-size: 1.1rem;
+              "
+            >
+              📊 导出报表
+            </div>
+            <p
+              style="
+                font-size: 0.9rem;
+                color: var(--text-secondary);
+                line-height: 1.6;
+              "
+            >
+              在日历视图中点击日期可切换类型（工作日/周末/节假日），确认无误后一键导出
+              Excel。
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 设置弹窗 -->
+    <div class="modal-overlay" id="settings-modal">
+      <div class="glass-card modal">
+        <div class="card-header">
+          <h3 class="card-title">配置</h3>
+          <button
+            class="icon-btn"
+            style="
+              width: 36px;
+              height: 36px;
+              background: transparent;
+              border: none;
+            "
+            onclick="closeSettings()"
+          >
+            <svg
+              width="24"
+              height="24"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
+            </svg>
+          </button>
+        </div>
+        <div class="card-content">
+          <div
+            style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem"
+          >
+            <div class="form-group">
+              <label class="form-label">工作日倍率</label>
+              <input
+                type="number"
+                id="setting-workday-rate"
+                class="form-input"
+                step="0.01"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">周末倍率</label>
+              <input
+                type="number"
+                id="setting-weekend-rate"
+                class="form-input"
+                step="0.01"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">节假日倍率</label>
+              <input
+                type="number"
+                id="setting-holiday-rate"
+                class="form-input"
+                step="0.01"
+              />
+            </div>
+            <div class="form-group">
+              <label class="form-label">事假扣款(元/h)</label>
+              <input
+                type="number"
+                id="setting-leave-rate"
+                class="form-input"
+                step="1"
+              />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">加班起算时间</label>
+            <input
+              type="time"
+              id="setting-start-time"
+              class="form-input"
+              step="1"
+            />
+          </div>
+          <div
+            style="
+              display: flex;
+              justify-content: flex-end;
+              gap: 1rem;
+              margin-top: 2rem;
+            "
+          >
+            <button class="btn btn-ghost" onclick="restoreDefaults()">
+              恢复默认
+            </button>
+            <button
+              class="btn btn-primary"
+              style="width: auto; padding: 0.8rem 2rem"
+              onclick="saveSettings()"
+            >
+              保存配置
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 书签生成弹窗 -->
+    <div class="modal-overlay" id="bookmarklet-modal">
+      <div class="glass-card modal" style="max-width: 580px">
+        <div class="card-header">
+          <h3 class="card-title">一键拉取书签</h3>
+          <button
+            class="icon-btn"
+            style="
+              width: 36px;
+              height: 36px;
+              background: transparent;
+              border: none;
+            "
+            onclick="closeBookmarklet()"
+          >
+            <svg
+              width="24"
+              height="24"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
+            </svg>
+          </button>
+        </div>
+        <div class="card-content">
+          <p
+            style="
+              font-size: 0.9rem;
+              color: var(--text-secondary);
+              margin-bottom: 1.5rem;
+              line-height: 1.6;
+            "
+          >
+            <strong style="color: var(--accent-green)">Step 1:</strong>
+            先启动本地服务 →
+            <code
+              style="
+                background: rgba(255, 255, 255, 0.1);
+                padding: 2px 6px;
+                border-radius: 4px;
+                font-size: 0.8rem;
+              "
+              >npx serve -p 8080</code
+            ><br />
+            <strong style="color: var(--accent-green)">Step 2:</strong> 用
+            <strong style="color: var(--accent-blue)"
+              >http://localhost:8080/OvertimePayCalculator.html</strong
+            >
+            打开此页面<br />
+            <strong style="color: var(--accent-green)">Step 3:</strong>
+            复制下方书签代码 → 创建浏览器书签<br />
+            <strong style="color: var(--accent-green)">Step 4:</strong> 在 HR
+            考勤页面点击书签 → 自动拉取并跳转计算
+          </p>
+          <div class="form-group">
+            <label class="form-label">目标月份</label>
+            <input
+              type="month"
+              id="bookmarklet-month"
+              class="form-input"
+              style="margin-bottom: 1rem"
+            />
+          </div>
+          <div class="form-group">
+            <label class="form-label"
+              >书签代码（拖到收藏栏 / 复制后创建书签）</label
+            >
+            <textarea
+              id="bookmarklet-code"
+              class="form-input form-textarea"
+              style="min-height: 80px; font-size: 0.75rem; cursor: pointer"
+              readonly
+              onclick="
+                this.select();
+                document.execCommand('copy');
+                showCopiedToast();
+              "
+            ></textarea>
+          </div>
+          <p
+            id="copied-toast"
+            style="
+              display: none;
+              color: var(--accent-green);
+              font-size: 0.85rem;
+              text-align: center;
+            "
+          >
+            ✓ 已复制到剪贴板！去 HR 考勤页面点击书签即可
+          </p>
+          <div
+            style="
+              display: flex;
+              justify-content: flex-end;
+              gap: 1rem;
+              margin-top: 1rem;
+            "
+          >
+            <button class="btn btn-ghost" onclick="copyBookmarklet()">
+              复制代码
+            </button>
+            <button
+              class="btn btn-primary"
+              style="width: auto; padding: 0.8rem 2rem"
+              onclick="generateBookmarklet()"
+            >
+              生成书签
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const DEFAULT_CONFIG = {
+        WORKDAY_OVERTIME_START: "19:00:00",
+        WORKDAY_RATE: 0.33,
+        WEEKEND_RATE: 0.5,
+        HOLIDAY_RATE: 1.0,
+        LEAVE_DEDUCTION_RATE: 20,
+      };
+
+      // 检测是否用 file:// 协议打开，提示启动本地服务
+      function checkServingProtocol() {
+        if (window.location.protocol === "file:") {
+          document.getElementById("server-notice").classList.add("show");
+          const cmd = document.getElementById("server-cmd");
+          const currentDir = window.location.href
+            .replace("file:///", "")
+            .replace(/\/OvertimePayCalculator\.html$/i, "");
+          cmd.textContent = `npx serve -p 8080 "${currentDir}"`;
+        }
+      }
+
+      function copyServerCmd() {
+        const cmd = document.getElementById("server-cmd");
+        const range = document.createRange();
+        range.selectNode(cmd);
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+        document.execCommand("copy");
+        window.getSelection().removeAllRanges();
+        const hint = document.getElementById("server-copied");
+        hint.style.display = "block";
+        setTimeout(() => {
+          hint.style.display = "none";
+        }, 3000);
+      }
+
+      const STORAGE_KEYS = {
+        DATA: "overtime_calc_data_v4", // Bump version
+        CONFIG: "overtime_calc_config_v4",
+      };
+
+      let UserConfig = { ...DEFAULT_CONFIG };
+      let state = {
+        dailyRecords: [],
+        rawData: [],
+        year: null,
+        month: null,
+      };
+
+      document.addEventListener("DOMContentLoaded", () => {
+        checkServingProtocol();
+        loadDataFromStorage();
+        initEventListeners();
+        initDragAndDrop();
+        initSettingsModal();
+      });
+
+      function initEventListeners() {
+        document
+          .getElementById("attendance-data")
+          .addEventListener("input", saveDataToStorage);
+        document
+          .getElementById("leave-hours")
+          .addEventListener("input", saveDataToStorage);
+        document
+          .getElementById("btn-settings")
+          .addEventListener("click", openSettings);
+        document
+          .getElementById("btn-bookmarklet")
+          .addEventListener("click", openBookmarklet);
+      }
+
+      function initDragAndDrop() {
+        const textarea = document.getElementById("attendance-data");
+        const events = ["dragenter", "dragover", "dragleave", "drop"];
+        events.forEach((e) =>
+          textarea.addEventListener(e, preventDefaults, false),
+        );
+
+        function preventDefaults(e) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+
+        ["dragenter", "dragover"].forEach((e) => {
+          textarea.addEventListener(
+            e,
+            () => textarea.classList.add("drag-over"),
+            false,
+          );
+        });
+        ["dragleave", "drop"].forEach((e) => {
+          textarea.addEventListener(
+            e,
+            () => textarea.classList.remove("drag-over"),
+            false,
+          );
+        });
+
+        textarea.addEventListener("drop", handleDrop, false);
+      }
+
+      function handleDrop(e) {
+        const dt = e.dataTransfer;
+        if (dt.files.length > 0) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            document.getElementById("attendance-data").value = e.target.result;
+            saveDataToStorage();
+          };
+          reader.readAsText(dt.files[0]);
+        }
+      }
+
+      function loadConfig() {
+        try {
+          const stored = localStorage.getItem(STORAGE_KEYS.CONFIG);
+          if (stored) UserConfig = { ...DEFAULT_CONFIG, ...JSON.parse(stored) };
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      function saveConfig() {
+        localStorage.setItem(STORAGE_KEYS.CONFIG, JSON.stringify(UserConfig));
+      }
+
+      function openSettings() {
+        document.getElementById("setting-workday-rate").value =
+          UserConfig.WORKDAY_RATE;
+        document.getElementById("setting-weekend-rate").value =
+          UserConfig.WEEKEND_RATE;
+        document.getElementById("setting-holiday-rate").value =
+          UserConfig.HOLIDAY_RATE;
+        document.getElementById("setting-leave-rate").value =
+          UserConfig.LEAVE_DEDUCTION_RATE;
+        document.getElementById("setting-start-time").value =
+          UserConfig.WORKDAY_OVERTIME_START;
+        document.getElementById("settings-modal").classList.add("show");
+      }
+
+      function closeSettings() {
+        document.getElementById("settings-modal").classList.remove("show");
+      }
+
+      function initSettingsModal() {
+        document
+          .getElementById("settings-modal")
+          .addEventListener("click", function (e) {
+            if (e.target === this) closeSettings();
+          });
+        document
+          .getElementById("bookmarklet-modal")
+          .addEventListener("click", function (e) {
+            if (e.target === this) closeBookmarklet();
+          });
+      }
+
+      window.saveSettings = function () {
+        UserConfig.WORKDAY_RATE = parseFloat(
+          document.getElementById("setting-workday-rate").value,
+        );
+        UserConfig.WEEKEND_RATE = parseFloat(
+          document.getElementById("setting-weekend-rate").value,
+        );
+        UserConfig.HOLIDAY_RATE = parseFloat(
+          document.getElementById("setting-holiday-rate").value,
+        );
+        UserConfig.LEAVE_DEDUCTION_RATE = parseFloat(
+          document.getElementById("setting-leave-rate").value,
+        );
+        let time = document.getElementById("setting-start-time").value;
+        if (time.length === 5) time += ":00";
+        UserConfig.WORKDAY_OVERTIME_START = time;
+
+        saveConfig();
+        closeSettings();
+        if (document.getElementById("attendance-data").value.trim())
+          calculateOvertime();
+      };
+
+      window.restoreDefaults = function () {
+        if (confirm("恢复默认配置?")) {
+          UserConfig = { ...DEFAULT_CONFIG };
+          saveConfig();
+          openSettings();
+        }
+      };
+
+      function saveDataToStorage() {
+        const data = {
+          attendance: document.getElementById("attendance-data").value,
+          leave: document.getElementById("leave-hours").value,
+        };
+        localStorage.setItem(STORAGE_KEYS.DATA, JSON.stringify(data));
+      }
+
+      function loadDataFromStorage() {
+        // 优先从 URL hash 读取（Bookmarklet 一键拉取模式）
+        if (window.location.hash && window.location.hash.startsWith("#data=")) {
+          try {
+            const b64 = window.location.hash.slice(6);
+            const json = decodeURIComponent(escape(atob(b64)));
+            const parsed = JSON.parse(json);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              document.getElementById("attendance-data").value = JSON.stringify(
+                parsed,
+                null,
+                2,
+              );
+              history.replaceState(
+                null,
+                "",
+                window.location.pathname + window.location.search,
+              );
+              setTimeout(() => calculateOvertime(), 400);
+              return;
+            }
+          } catch (e) {
+            console.warn("Hash data parse failed:", e);
+          }
+        }
+
+        try {
+          const stored = localStorage.getItem(STORAGE_KEYS.DATA);
+          if (stored) {
+            const data = JSON.parse(stored);
+            if (data.attendance)
+              document.getElementById("attendance-data").value =
+                data.attendance;
+            if (data.leave)
+              document.getElementById("leave-hours").value = data.leave;
+          }
+        } catch (e) {}
+      }
+
+      window.clearData = function () {
+        if (confirm("清空所有数据?")) {
+          document.getElementById("attendance-data").value = "";
+          document.getElementById("leave-hours").value = "0";
+          localStorage.removeItem(STORAGE_KEYS.DATA);
+          location.reload();
+        }
+      };
+
+      // 核心计算逻辑
+      function parseDateTime(str) {
+        if (!str) return null;
+        const regex = /^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/;
+        if (!regex.test(str)) return null;
+        return new Date(str.replace(" ", "T"));
+      }
+
+      function getPreviousDay(dateStr) {
+        const d = new Date(dateStr);
+        d.setDate(d.getDate() - 1);
+        return d.toISOString().split("T")[0];
+      }
+
+      async function calculateOvertime() {
+        const btn = document.getElementById("btn-calculate");
+        const originalHtml = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = "计算中...";
+        document.getElementById("error-message").style.display = "none";
+
+        await new Promise((r) => setTimeout(r, 400)); // 模拟加载感
+
+        try {
+          const inputStr = document
+            .getElementById("attendance-data")
+            .value.trim();
+          if (!inputStr) throw new Error("请输入打卡数据");
+
+          let rawData;
+          try {
+            const fixedStr = inputStr
+              .replace(/,\s*]/g, "]")
+              .replace(/,\s*}/g, "}");
+            rawData = JSON.parse(fixedStr);
+          } catch (e) {
+            throw new Error("JSON格式错误，请检查复制是否完整");
+          }
+
+          if (!Array.isArray(rawData) || rawData.length === 0)
+            throw new Error("数据格式无效");
+
+          state.rawData = rawData;
+          if (rawData[0].SHIFTTERM) {
+            const [y, m] = rawData[0].SHIFTTERM.split("-").map(Number);
+            state.year = y;
+            state.month = m;
+          } else throw new Error("数据缺少日期字段 SHIFTTERM");
+
+          processRecords(rawData);
+          renderResults();
+          renderCalendar();
+          renderCharts();
+          document.getElementById("export-section").style.display = "block";
+          document
+            .querySelector(".results-grid")
+            .scrollIntoView({ behavior: "smooth" });
+        } catch (e) {
+          const errEl = document.getElementById("error-message");
+          document.getElementById("error-text").textContent = e.message;
+          errEl.style.display = "flex";
+        } finally {
+          btn.disabled = false;
+          btn.innerHTML = originalHtml;
+        }
+      }
+
+      function processRecords(data) {
+        state.dailyRecords = [];
+        const daysMap = {};
+
+        data.forEach((record) => {
+          if (!record.CARDTIME || !record.SHIFTTERM) return;
+          let date = record.SHIFTTERM;
+          const dateTime = parseDateTime(record.CARDTIME);
+          if (!dateTime) return;
+
+          const [ry, rm, rd] = record.SHIFTTERM.split("-").map(Number);
+          // 凌晨6点前的打卡算作前一天
+          const cutoff = new Date(ry, rm - 1, rd, 6, 0, 0);
+          if (dateTime < cutoff && rd > 1)
+            date = getPreviousDay(record.SHIFTTERM);
+
+          const dayKey = parseInt(date.split("-")[2]);
+          if (!daysMap[dayKey]) daysMap[dayKey] = [];
+          record.effectiveDate = date;
+          daysMap[dayKey].push(record);
+        });
+
+        for (const day in daysMap) {
+          const records = daysMap[day].sort(
+            (a, b) => parseDateTime(a.CARDTIME) - parseDateTime(b.CARDTIME),
+          );
+          if (records.length < 2) continue;
+
+          const dateObj = new Date(state.year, state.month - 1, parseInt(day));
+          const dayOfWeek = dateObj.getDay();
+          const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+
+          calculateSingleDay(
+            records[0],
+            records[records.length - 1],
+            isWeekend ? "weekend" : "workday",
+            parseInt(day),
+          );
+        }
+      }
+
+      function calculateSingleDay(startRecord, endRecord, type, day) {
+        const start = parseDateTime(startRecord.CARDTIME);
+        const end = parseDateTime(endRecord.CARDTIME);
+        let minutes = 0;
+        const isHoliday = type === "holiday";
+        const isWeekend = type === "weekend";
+
+        if (isHoliday || isWeekend) {
+          minutes = (end - start) / 1000 / 60;
+        } else {
+          const overtimeStart = new Date(
+            `${startRecord.effectiveDate}T${UserConfig.WORKDAY_OVERTIME_START}`,
+          );
+          if (end > overtimeStart) {
+            const validStart = start > overtimeStart ? start : overtimeStart;
+            minutes = (end - validStart) / 1000 / 60;
+          }
+        }
+        minutes = Math.max(0, Math.floor(minutes));
+
+        let rate = UserConfig.WORKDAY_RATE;
+        if (isHoliday) rate = UserConfig.HOLIDAY_RATE;
+        else if (isWeekend) rate = UserConfig.WEEKEND_RATE;
+
+        const record = {
+          day,
+          date: startRecord.effectiveDate,
+          startTime: startRecord.CARDTIME,
+          endTime: endRecord.CARDTIME,
+          minutes,
+          fee: minutes * rate,
+          type,
+          isWeekend,
+          isHoliday,
+        };
+
+        const idx = state.dailyRecords.findIndex((r) => r.day === day);
+        if (idx >= 0) state.dailyRecords[idx] = record;
+        else state.dailyRecords.push(record);
+      }
+
+      window.updateDayType = function (day) {
+        const record = state.dailyRecords.find((r) => r.day === day);
+        if (!record) return;
+
+        const types = ["workday", "weekend", "holiday"];
+        const nextType = types[(types.indexOf(record.type) + 1) % 3];
+
+        record.type = nextType;
+        const isHoliday = nextType === "holiday";
+        const isWeekend = nextType === "weekend";
+
+        const start = parseDateTime(record.startTime);
+        const end = parseDateTime(record.endTime);
+        let minutes = 0;
+
+        if (isHoliday || isWeekend) {
+          minutes = (end - start) / 1000 / 60;
+        } else {
+          const overtimeStart = new Date(
+            `${record.date}T${UserConfig.WORKDAY_OVERTIME_START}`,
+          );
+          if (end > overtimeStart) {
+            const validStart = start > overtimeStart ? start : overtimeStart;
+            minutes = (end - validStart) / 1000 / 60;
+          }
+        }
+        minutes = Math.max(0, Math.floor(minutes));
+
+        let rate = UserConfig.WORKDAY_RATE;
+        if (isHoliday) rate = UserConfig.HOLIDAY_RATE;
+        else if (isWeekend) rate = UserConfig.WEEKEND_RATE;
+
+        record.minutes = minutes;
+        record.fee = minutes * rate;
+
+        renderResults();
+        renderCalendar();
+        renderCharts();
+      };
+
+      function renderResults() {
+        const stats = { weekday: 0, weekend: 0, holiday: 0 };
+        let totalFee = 0;
+
+        state.dailyRecords.forEach((r) => {
+          if (r.type === "holiday") stats.holiday += r.minutes;
+          else if (r.type === "weekend") stats.weekend += r.minutes;
+          else stats.weekday += r.minutes;
+          totalFee += r.fee;
+        });
+
+        const leaveHours =
+          parseFloat(document.getElementById("leave-hours").value) || 0;
+        const deduction = leaveHours * UserConfig.LEAVE_DEDUCTION_RATE;
+        const finalTotal = totalFee - deduction;
+
+        const html = `
+          <div class="result-item highlight">
+            <div class="result-value">¥${finalTotal.toFixed(2)}</div>
+            <div class="result-label">最终到手 (已扣事假¥${deduction})</div>
+          </div>
+          <div class="result-item">
+            <div class="result-value">${Math.floor(
+              stats.weekday,
+            )}<span style="font-size:0.5em">分</span></div>
+            <div class="result-label">平日加班</div>
+          </div>
+          <div class="result-item">
+            <div class="result-value">${Math.floor(
+              stats.weekend,
+            )}<span style="font-size:0.5em">分</span></div>
+            <div class="result-label">周末加班</div>
+          </div>
+          ${
+            stats.holiday > 0 ?
+              `
+          <div class="result-item">
+            <div class="result-value">${Math.floor(
+              stats.holiday,
+            )}<span style="font-size:0.5em">分</span></div>
+            <div class="result-label">节假日加班</div>
+          </div>`
+            : ""
+          }
+        `;
+        document.getElementById("results-container").innerHTML = html;
+      }
+
+      function renderCalendar() {
+        const container = document.getElementById("calendar-container");
+        container.style.display = "block";
+        document.getElementById("calendar-title").textContent =
+          `${state.year}年${state.month}月`;
+
+        const daysInMonth = new Date(state.year, state.month, 0).getDate();
+        const firstDay = new Date(state.year, state.month - 1, 1).getDay() || 7;
+
+        let html = "";
+        ["一", "二", "三", "四", "五", "六", "日"].forEach(
+          (w) => (html += `<div class="calendar-day-header">周${w}</div>`),
+        );
+
+        for (let i = 1; i < firstDay; i++)
+          html += `<div class="calendar-day" style="background:transparent; cursor:default;"></div>`;
+
+        for (let d = 1; d <= daysInMonth; d++) {
+          const record = state.dailyRecords.find((r) => r.day === d);
+          let inner = `<div class="day-number">${d}</div>`;
+
+          if (record) {
+            inner += `<div style="font-size:0.8rem; font-weight:700; color:var(--text-primary)">¥${record.fee.toFixed(
+              0,
+            )}</div>`;
+            const tagClass = record.type; // workday, weekend, holiday
+            const tagName =
+              record.type === "holiday" ? "节假日"
+              : record.type === "weekend" ? "周末"
+              : "工作日";
+            inner += `<div class="day-tag ${tagClass}">${tagName}</div>`;
+            html += `<div class="calendar-day" onclick="updateDayType(${d})">${inner}</div>`;
+          } else {
+            inner += `<div style="font-size:0.75rem; color:var(--text-tertiary); opacity:0.5; margin-top:auto;">无打卡</div>`;
+            html += `<div class="calendar-day" style="cursor:default">${inner}</div>`;
+          }
+        }
+        document.getElementById("calendar-grid").innerHTML = html;
+      }
+
+      function renderCharts() {
+        document.getElementById("charts-container").style.display = "block";
+        const textColor = "#8e8e93";
+        const colors = ["#30d158", "#0a84ff", "#ff9f0a"];
+
+        let wFee = 0,
+          eFee = 0,
+          hFee = 0;
+        state.dailyRecords.forEach((r) => {
+          if (r.type === "holiday") hFee += r.fee;
+          else if (r.type === "weekend") eFee += r.fee;
+          else wFee += r.fee;
+        });
+
+        // 1. Pie
+        const pieChart = echarts.init(document.getElementById("fee-pie-chart"));
+        pieChart.setOption({
+          title: {
+            text: "加班费构成",
+            left: "center",
+            textStyle: { color: "#fff" },
+          },
+          tooltip: {
+            trigger: "item",
+            backgroundColor: "rgba(30,30,35,0.9)",
+            borderColor: "rgba(255,255,255,0.1)",
+            textStyle: { color: "#fff" },
+          },
+          series: [
+            {
+              type: "pie",
+              radius: ["40%", "70%"],
+              itemStyle: {
+                borderRadius: 8,
+                borderColor: "#1c1c1e",
+                borderWidth: 2,
+              },
+              label: { color: textColor },
+              data: [
+                { value: wFee, name: "平日", itemStyle: { color: colors[0] } },
+                { value: eFee, name: "周末", itemStyle: { color: colors[1] } },
+                {
+                  value: hFee,
+                  name: "节假日",
+                  itemStyle: { color: colors[2] },
+                },
+              ].filter((d) => d.value > 0),
+            },
+          ],
+        });
+
+        // 2. Bar (Time)
+        let wMin = 0,
+          eMin = 0,
+          hMin = 0;
+        state.dailyRecords.forEach((r) => {
+          if (r.type === "holiday") hMin += r.minutes;
+          else if (r.type === "weekend") eMin += r.minutes;
+          else wMin += r.minutes;
+        });
+        const barChart = echarts.init(
+          document.getElementById("time-bar-chart"),
+        );
+        barChart.setOption({
+          title: {
+            text: "加班时长 (小时)",
+            left: "center",
+            textStyle: { color: "#fff" },
+          },
+          tooltip: {
+            trigger: "axis",
+            backgroundColor: "rgba(30,30,35,0.9)",
+            borderColor: "rgba(255,255,255,0.1)",
+            textStyle: { color: "#fff" },
+          },
+          xAxis: {
+            type: "category",
+            data: ["平日", "周末", "节假日"],
+            axisLabel: { color: textColor },
+          },
+          yAxis: {
+            type: "value",
+            axisLabel: { color: textColor },
+            splitLine: { lineStyle: { color: "rgba(255,255,255,0.05)" } },
+          },
+          series: [
+            {
+              type: "bar",
+              barWidth: "40%",
+              data: [
+                {
+                  value: (wMin / 60).toFixed(1),
+                  itemStyle: { color: colors[0] },
+                },
+                {
+                  value: (eMin / 60).toFixed(1),
+                  itemStyle: { color: colors[1] },
+                },
+                {
+                  value: (hMin / 60).toFixed(1),
+                  itemStyle: { color: colors[2] },
+                },
+              ],
+            },
+          ],
+        });
+
+        // 3. Line (Trend)
+        const dailyData = state.dailyRecords
+          .map((r) => ({ day: r.day, fee: r.fee }))
+          .sort((a, b) => a.day - b.day);
+        const lineChart = echarts.init(
+          document.getElementById("daily-line-chart"),
+        );
+        lineChart.setOption({
+          title: {
+            text: "每日收益趋势",
+            left: "center",
+            textStyle: { color: "#fff" },
+          },
+          tooltip: {
+            trigger: "axis",
+            backgroundColor: "rgba(30,30,35,0.9)",
+            borderColor: "rgba(255,255,255,0.1)",
+            textStyle: { color: "#fff" },
+          },
+          xAxis: {
+            type: "category",
+            data: dailyData.map((d) => d.day + "日"),
+            axisLabel: { color: textColor },
+          },
+          yAxis: {
+            type: "value",
+            axisLabel: { color: textColor },
+            splitLine: { lineStyle: { color: "rgba(255,255,255,0.05)" } },
+          },
+          series: [
+            {
+              data: dailyData.map((d) => d.fee.toFixed(1)),
+              type: "line",
+              smooth: true,
+              areaStyle: { opacity: 0.2 },
+              itemStyle: { color: colors[0] },
+            },
+          ],
+        });
+
+        // 4. Doughnut (Days)
+        let wDays = 0,
+          eDays = 0,
+          hDays = 0;
+        state.dailyRecords.forEach((r) => {
+          if (r.type === "holiday") hDays++;
+          else if (r.type === "weekend") eDays++;
+          else wDays++;
+        });
+        const dChart = echarts.init(
+          document.getElementById("days-doughnut-chart"),
+        );
+        dChart.setOption({
+          title: {
+            text: "加班天数分布",
+            left: "center",
+            textStyle: { color: "#fff" },
+          },
+          tooltip: {
+            trigger: "item",
+            backgroundColor: "rgba(30,30,35,0.9)",
+            borderColor: "rgba(255,255,255,0.1)",
+            textStyle: { color: "#fff" },
+          },
+          series: [
+            {
+              type: "pie",
+              radius: ["50%", "70%"],
+              itemStyle: {
+                borderRadius: 5,
+                borderColor: "#1c1c1e",
+                borderWidth: 2,
+              },
+              label: { color: textColor },
+              data: [
+                { value: wDays, name: "平日", itemStyle: { color: colors[0] } },
+                { value: eDays, name: "周末", itemStyle: { color: colors[1] } },
+                {
+                  value: hDays,
+                  name: "节假日",
+                  itemStyle: { color: colors[2] },
+                },
+              ].filter((d) => d.value > 0),
+            },
+          ],
+        });
+
+        window.onresize = () => {
+          pieChart.resize();
+          barChart.resize();
+          lineChart.resize();
+          dChart.resize();
+        };
+      }
+
+      function exportToExcel() {
+        if (!state.dailyRecords.length) return;
+        try {
+          const wb = XLSX.utils.book_new();
+          const data = state.dailyRecords.map((r) => ({
+            日期: r.date,
+            类型:
+              r.type === "holiday" ? "节假日"
+              : r.type === "weekend" ? "周末"
+              : "工作日",
+            上班: r.startTime.split(" ")[1],
+            下班: r.endTime.split(" ")[1],
+            时长分: Math.floor(r.minutes),
+            时长时: (r.minutes / 60).toFixed(2),
+            费用: r.fee.toFixed(2),
+          }));
+          const ws = XLSX.utils.json_to_sheet(data);
+          XLSX.utils.book_append_sheet(wb, ws, "明细");
+          XLSX.writeFile(wb, `加班费_${state.year}_${state.month}.xlsx`);
+        } catch (e) {
+          alert("导出失败:" + e.message);
+        }
+      }
+
+      // ===== Bookmarklet 一键拉取 =====
+      function openBookmarklet() {
+        const now = new Date();
+        document.getElementById("bookmarklet-month").value =
+          `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+        generateBookmarklet();
+        document.getElementById("bookmarklet-modal").classList.add("show");
+      }
+
+      function closeBookmarklet() {
+        document.getElementById("bookmarklet-modal").classList.remove("show");
+      }
+
+      window.generateBookmarklet = function () {
+        const monthVal = document.getElementById("bookmarklet-month").value;
+        if (!monthVal) return;
+        const [y, m] = monthVal.split("-");
+
+        // 如果在 file:// 协议下，提醒用户先用 localhost
+        if (window.location.protocol === "file:") {
+          alert(
+            "请先启动本地服务，用 http://localhost:8080 访问此页面后再生成书签。\n\n终端运行: npx serve -p 8080",
+          );
+          return;
+        }
+
+        const calcUrl = window.location.href.split("#")[0];
+
+        const code = `javascript:(function(){
+  var m="${y}-${m}";
+  var d=document.createElement("div");
+  d.innerHTML='<div style="position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:99999;background:rgba(0,0,0,0.88);color:#fff;padding:24px 36px;border-radius:16px;font-size:16px;font-family:sans-serif;backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,0.15)">⏳ 正在拉取 '+m+' 打卡数据...</div>';
+  document.body.appendChild(d);
+  fetch("/ajax/function/alist!G8_TRwtFegd0QeO2BfN6kg.220302",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({appParam:{TERM:m+"-01T00:00:00.000Z"},appFnKey:"SE0302",formData:{}})
+  })
+  .then(function(r){return r.json()})
+  .then(function(data){
+    d.remove();
+    if(!Array.isArray(data)||data.length===0){
+      alert("未获取到 "+m+" 的打卡数据");
+      return;
+    }
+    var clean=data.map(function(r){return{CARDTIME:r.CARDTIME,SHIFTTERM:r.SHIFTTERM}});
+    var json=JSON.stringify(clean);
+    var b64=btoa(unescape(encodeURIComponent(json)));
+    window.location.href="${calcUrl}#data="+b64;
+  })
+  .catch(function(e){
+    d.remove();
+    alert("拉取失败: "+e.message+"\\n请确保已在 HR 考勤页面且已登录");
+  });
+})();`.replace(/\n\s*/g, "");
+
+        document.getElementById("bookmarklet-code").value = code;
+      };
+
+      window.copyBookmarklet = function () {
+        const ta = document.getElementById("bookmarklet-code");
+        ta.select();
+        document.execCommand("copy");
+        showCopiedToast();
+      };
+
+      function showCopiedToast() {
+        const toast = document.getElementById("copied-toast");
+        toast.style.display = "block";
+        setTimeout(() => {
+          toast.style.display = "none";
+        }, 4000);
+      }
+    </script>
+  </body>
+</html>
